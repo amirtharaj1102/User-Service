@@ -65,29 +65,4 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional
-    public AuthResponse googleLogin(String email, String name) {
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email is required for Google Sign-in");
-        }
-
-        User user = userRepository.findByEmail(email).orElseGet(() -> {
-            User newUser = User.builder()
-                    .name(name)
-                    .email(email)
-                    .password(passwordEncoder.encode("google-oauth-dummy-password-" + System.currentTimeMillis()))
-                    .roles(Set.of("ROLE_USER"))
-                    .build();
-            return userRepository.save(newUser);
-        });
-
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRoles());
-
-        return AuthResponse.builder()
-                .token(token)
-                .name(user.getName())
-                .email(user.getEmail())
-                .roles(user.getRoles())
-                .build();
-    }
 }

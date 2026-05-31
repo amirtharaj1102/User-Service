@@ -61,16 +61,4 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid or expired token"));
     }
 
-    @PostMapping("/google")
-    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> requestBody) {
-        String email = requestBody.get("email");
-        String name = requestBody.getOrDefault("name", "Google User");
-
-        try {
-            AuthResponse response = authService.googleLogin(email, name);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
-    }
 }
